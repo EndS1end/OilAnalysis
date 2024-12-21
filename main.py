@@ -117,8 +117,11 @@ async def calculate(startValues=Form(...), maxValues=Form(...), coefs=Form(...),
     fig2, axes = plt.subplots(2, 3, figsize=(18, 12), subplot_kw=dict(polar=True))
 
     for i, ax in enumerate(axes.flat):
-        # Получаем значения для момента времени i
-        values = solution[i].tolist()
+        # Вычисляем пропорциональный индекс для текущего i
+        idx = int(i * (len(solution) - 1) / 5)  # Пропорционально делим массив solution
+
+        # Получаем значения для момента времени idx
+        values = solution[idx].tolist()
 
         # Замыкаем полигон (чтобы соединить последний лепесток с первым)
         values += values[:1]
@@ -133,7 +136,10 @@ async def calculate(startValues=Form(...), maxValues=Form(...), coefs=Form(...),
         ax.set_yticklabels([])
         ax.set_xticks(angles[:-1])
         ax.set_xticklabels(categories, fontsize=8)
-        ax.set_title(f't = {time_intervals[i]}', size=16, y=1.1)
+
+        # Вычисляем пропорциональный индекс для time_intervals
+        time_idx = int(i * (len(time_intervals) - 1) / 5)
+        ax.set_title(f't = {round(time_intervals[time_idx], 2)}', size=16, y=1.1)
 
     # Добавляем легенду
     plt.legend(loc='upper right')
